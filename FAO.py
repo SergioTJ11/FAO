@@ -1,5 +1,5 @@
 import json
-
+import statistics
 
 class Fao:
 
@@ -21,7 +21,7 @@ class Fao:
                 country_list.append(element["Area"])
         return country_list
 
-    def products(self, nameCountry): 
+    def products(self, nameCountry):
         '''
         Returns all products for a given country.
         '''
@@ -39,7 +39,7 @@ class Fao:
         country_dic = {}
         years_list = []
 
-        for date in range(years[0], years[-1]+1):
+        for date in range(years[0], years[-1] + 1):
             years_list.append("Y" + str(date))
 
         for country in country_list:
@@ -71,7 +71,7 @@ class Fao:
         country_dic = {}
         years_list = []
 
-        for date in range(years[0], years[-1]+1):
+        for date in range(years[0], years[-1] + 1):
             years_list.append("Y" + str(date))
 
         for country in country_list:
@@ -84,10 +84,10 @@ class Fao:
 
                     if element["Area"] == country and element["Item"] == production:
                         currentyield = {key: element[key] for key in years_list}
-                        
+
                         for elt in currentyield.items():
                             if elt[1] == "":
-                                currentyield[elt[0]] = 0                        
+                                currentyield[elt[0]] = 0
 
                         if currentyield[min(currentyield)] < country_dic[country][-1]:
                             country_dic[country] = [production, min(currentyield), currentyield[min(currentyield)]]
@@ -99,28 +99,25 @@ class Fao:
                 country_dic[country] = [country_dic[country], othermin]
 
         return country_dic
-    
-    #parameters : years -> range of years, Production of the concerned countries specified in listOfCountries
+
+    # parameters : years -> range of years, Production of the concerned countries specified in listOfCountries
     def av(self, listOfCountries, years, Production):
         mean_list = []
         yearsRange = []
         yearsRange.append(years[0][1:])
         yearsRange.append(years[1][1:])
 
-        result_list=[]
+        result_list = []
         for element in self.dataBase:
             if element["Area"] in listOfCountries and element["Item"] == Production and element["Element"] == "Food":
-                #replace empty item by 0
+                # replace empty item by 0
 
-                for i in range(int(yearsRange[0]), int(yearsRange[1])+1):
-                    if element["Y"+str(i)] == "":
+                for i in range(int(yearsRange[0]), int(yearsRange[1]) + 1):
+                    if element["Y" + str(i)] == "":
                         element["Y" + str(i)] = 0
 
-                    result_list.append(element["Y"+str(i)])
-                mean_list.append(element["Area"]+":"+str(statistics.mean(result_list)))
+                    result_list.append(element["Y" + str(i)])
+                mean_list.append(element["Area"] + ":" + str(statistics.mean(result_list)))
                 result_list = []
 
-
         return mean_list
-
-
