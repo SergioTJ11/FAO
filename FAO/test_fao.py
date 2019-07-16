@@ -1,10 +1,10 @@
 from unittest import TestCase
-from FAO import FAO
+import FAO
 
 
 class TestFao(TestCase):
     def setUp(self):
-        self.data = FAO()
+        self.data = FAO.FAOdata()
 
     def test_countries(self):
         self.assertEqual(len(self.data.countries()), 174)

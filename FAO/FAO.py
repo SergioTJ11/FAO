@@ -1,13 +1,17 @@
 import json
 import statistics
+import os
 
-class FAO:
+THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
+my_file = os.path.join(THIS_FOLDER, 'FAO+database.json')
+
+class FAOdata:
 
     def __init__(self):
         '''
         Initializes the class by importing the data from the file
         '''
-        file = open("FAO+database.json", 'r')
+        file = open(my_file, 'r')
         self.dataBase = json.load(file)
         file.close()
 
