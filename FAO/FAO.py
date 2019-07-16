@@ -1,7 +1,7 @@
 import json
 import statistics
 
-class Fao:
+class FAO:
 
     def __init__(self):
         '''
