@@ -26,7 +26,7 @@ pipenv shell
 WIP
 
 p.ex.: to use countries method in FAO  
-in shel run : 
+in shell run : 
 ```bash
 python
 from FAO.FAO import FAOdata
