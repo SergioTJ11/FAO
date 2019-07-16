@@ -23,6 +23,7 @@ class FAOdata:
         for element in self.dataBase:
             if element["Area"] not in country_list:
                 country_list.append(element["Area"])
+        country_list.sort()
         return country_list
 
     def products(self, country):
@@ -33,6 +34,7 @@ class FAOdata:
         for element in self.dataBase:
             if element["Area"] == country and element["Item"] not in products_list:
                 products_list.append(element["Item"])
+        products_list.sort()
         return products_list
 
     def country_prod(self, countries):
@@ -79,7 +81,8 @@ class FAOdata:
                             othermax.append([production, max(currentyield), currentyield[max(currentyield)]])
 
             if othermax != []:
-                country_dic[country] = [country_dic[country], othermax]
+                country_dic[country] = othermax
+                country_dic[country].sort()
 
         return country_dic
 
@@ -115,29 +118,31 @@ class FAOdata:
                             othermin.append([production, min(currentyield), currentyield[min(currentyield)]])
 
             if othermin != []:
-                country_dic[country] = [country_dic[country], othermin]
+                country_dic[country] = othermin
+
+            country_dic[country].sort()
 
         return country_dic
     
     # parameters : years -> range of years, Production of the concerned countries specified in listOfCountries
     def av(self, listOfCountries, years, Production):
-        mean_list = []
+        mean_list = {}
         yearsRange = []
-        yearsRange.append(years[0][1:])
-        yearsRange.append(years[1][1:])
+        for date in range(years[0], years[-1]+1):
+            yearsRange.append("Y" + str(date))
 
-        result_list = []
-        for element in self.dataBase:
-            if element["Area"] in listOfCountries and element["Item"] == Production and element["Element"] == "Food":
-                # replace empty item by 0
+        for country in listOfCountries:
+            result_list = []
+            for element in self.dataBase:
+                if element["Area"] == country and element["Item"] == Production:
+                    # replace empty item by 0
 
-                for i in range(int(yearsRange[0]), int(yearsRange[1]) + 1):
-                    if element["Y" + str(i)] == "":
-                        element["Y" + str(i)] = 0
+                    for i in yearsRange:
+                        if element[i] == "":
+                            element[i] = 0
+                        result_list.append(element[i])
 
-                    result_list.append(element["Y" + str(i)])
-                mean_list.append(element["Area"] + ":" + str(statistics.mean(result_list)))
-                result_list = []
+            mean_list[country] = statistics.mean(result_list)
 
         return mean_list
 

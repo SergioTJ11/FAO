@@ -7,23 +7,35 @@ class TestFao(TestCase):
         self.data = FAO.FAOdata()
 
     def test_countries(self):
-        self.assertEqual(len(self.data.countries()), 174)
-        self.assertEqual(self.data.countries()[0], "Afghanistan")
-        self.assertEqual(self.data.countries()[100], "Malta")
-        self.assertEqual(self.data.countries()[-1], "Zimbabwe")
+        countries = self.data.countries()
+        self.assertEqual(len(countries), 174)
+        self.assertEqual(countries[0], "Afghanistan")
+        self.assertEqual(countries[100], "Malta")
+        self.assertEqual(countries[-1], "Zimbabwe")
 
     def test_products(self):
-        self.assertEqual(self.data.products("Afghanistan")[0], "Wheat and products")
+        countries = self.data.countries()
+        self.assertEqual(self.data.products(countries[0])[0], "Alcoholic Beverages")
+        self.assertEqual(self.data.products(countries[0])[-1], "Wine")
+        self.assertEqual(self.data.products(countries[-1])[-1], "Wine")
 
     def test_min(self):
-        self.assertEqual(self.data.min(["Afghanistan"], [2010, 2013])["Afghanistan"][0][-1], 0)
+        countries = self.data.countries()
+        yearRange = [2010, 2013]
+        self.assertEqual(self.data.min([countries[0]], yearRange)[countries[0]][0], ["Beer", "Y2010", 3])
+        self.assertEqual(self.data.min([countries[-1]], yearRange)[countries[-1]][-1], ["Sugar beet", "Y2010", 0])
 
     def test_max(self):
-        self.assertEqual(self.data.max(["Afghanistan"], [2010, 2013])["Afghanistan"][-1], 5495)
+        countries = self.data.countries()
+        yearRange = [2010, 2013]
+        self.assertEqual(self.data.max([countries[0]], yearRange)[countries[0]][-1], 5495)
+        self.assertEqual(self.data.max([countries[-1]], yearRange)[countries[-1]][-1], 2016)
 
     def test_av(self):
-        self.assertEqual(self.data.av(["Afghanistan","Cyprus"], ['Y1961', 'Y1965'], "Wheat and products"), ["Afghanistan:1889.8","Cyprus:67.4"])
-
+        countries = self.data.countries()
+        yearRange = [1961, 1965]
+        self.assertEqual(self.data.av([countries[0], countries[5]], yearRange, "Wheat and products"), {"Afghanistan":1889.8,"Argentina":1437.4})
+        self.assertEqual(self.data.av([countries[100], countries[105]], yearRange, "Wheat and products"), {"Malta":50,"Montenegro":0})
 
         
 
