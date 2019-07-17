@@ -93,7 +93,7 @@ class FAOdata:
         country_dic = {}
         years_list = []
 
-        for date in range(years[0], years[-1]+1):
+        for date in range(years[0], years[-1] + 1):
             years_list.append("Y" + str(date))
 
         for country in country_list:
@@ -119,8 +119,7 @@ class FAOdata:
 
             if othermin != []:
                 country_dic[country] = othermin
-
-            country_dic[country].sort()
+                country_dic[country].sort()
 
         return country_dic
     
